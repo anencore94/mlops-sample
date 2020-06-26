@@ -24,7 +24,7 @@ kubectl apply -f 3_svc.yaml
 ## 접속 방법
 > mysql client 가 깔려있는 노드 혹은 pod 에서 수행
 > 현재 하드코딩된 config 정보는 2_pod.yaml 의 env 에서 확인 가능
-- mysql -h {$mysql pod 이 생성된 node의 IP} --port=31111 -u testuser -ptestpassword
+- mysql -h {$mysql pod 이 생성된 node의 IP} --port=31111 -u testuser -ptestpassword -D testdb
 
 ## 확인 방법
 - mysql bash 에 접속한 후 다음 수행하여 정상 출력되는지 확인
