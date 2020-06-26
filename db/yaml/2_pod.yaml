@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mysql
+  labels:
+    run: mysql
+spec:
+  containers:
+  - name: mysql
+    image: mysql        
+    env:
+    - name: MYSQL_DATABASE
+      value: testdb
+    - name: MYSQL_USER
+      value: testuser
+    - name: MYSQL_PASSWORD
+      value: testpassword
+    - name: MYSQL_ROOT_PASSWORD
+      value: testpassword
+    ports:
+      - containerPort: 3306
+    volumeMounts:
+      - name: mysql-initdb
+        mountPath: /docker-entrypoint-initdb.d
+      - name: mysql-config
+        mountPath: /etc/mysql/conf.d
+  volumes:
+    - name: mysql-initdb
+      configMap:
+        name: mysql-initdb-config
+    - name: mysql-config
+      configMap:
+        name: mysql-utf8-config

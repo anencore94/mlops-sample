@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-utf8-config
+data:
+  my.cnf: |-
+    [client]
+    default-character-set=utf8
+    [mysql]
+    default-character-set=utf8
+    [mysqld]
+    collation-server = utf8_unicode_ci
+    init-connect='SET NAMES utf8'
+    character-set-server = utf8
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-initdb-config
+data:
+  createdb.sql: |
+    CREATE TABLE MODEL_INFO (
+    EXPERIMENT_ID   VARCHAR(255)    NOT NULL,
+    ID              INT             NOT NULL   PRIMARY KEY,
+    ALGORITHM       VARCHAR(255)    NOT NULL,
+    METRIC          VARCHAR(255)    NOT NULL,
+    METRIC_RESULT   VARCHAR(255)    NOT NULL
+    );
+
+  insert.sql: |
+    INSERT INTO MODEL_INFO VALUES ("ex_1", 1, "vae", "auroc", "good");
+    INSERT INTO MODEL_INFO VALUES ("ex_2", 2, "vae", "rapp", "가나다라");
