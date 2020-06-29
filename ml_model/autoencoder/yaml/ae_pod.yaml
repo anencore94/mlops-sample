@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ae
+  labels:
+    mlmodel: ae
+spec:
+  serviceAccountName: kjy
+  containers:
+    - name: ae
+      image: 192.1.4.75:5000/model-ae:v0.1.0
+      imagePullPolicy: Always
+      ports:
+        - containerPort: 3307
