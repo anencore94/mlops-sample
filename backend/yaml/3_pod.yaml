@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: flask
+  labels:
+    run: flask
+spec:
+  serviceAccountName: kjy
+  containers:
+    - name: flask
+      image: 192.1.4.75:5000/hello-flask:v0.1.2
+      imagePullPolicy: Always
+      ports:
+        - containerPort: 3307
