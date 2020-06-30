@@ -12,7 +12,7 @@ def is_binary(x):
 ### data should have "label" column
 
 def read_data(name, scale=True):
-  os.chdir(os.path.dirname(__file__) + '/datasets')
+  os.chdir('/input/datasets')
   data = pd.read_csv(name + '.csv')
   features = list(data.columns)
   if 'label' in features:

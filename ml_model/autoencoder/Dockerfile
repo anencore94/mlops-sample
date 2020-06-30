@@ -10,15 +10,12 @@ COPY data.py .
 COPY model.py .
 COPY train.py .
 COPY requirements.txt ./requirements.txt
-COPY datasets ./datasets
-# TODO data 는 pvc 에 저장하고 pod 에선 mount 해서 사용하도록 변경
 
 # library 들이 너무 커서 build 시간 너무 오래 걸림..
 RUN pip install -r requirements.txt
 
-# TODO ml_model 의 output 을 정리해서 RWM pvc 에 저장
-RUN mkdir -p ./ex_1
-RUN echo "python ./train.py > ./ex_1/train_stat && sleep 3600" >> ./start.sh && \
+# TODO /output 디렉토리는 RWM pvc 로
+RUN echo "mkdir -p /output/ex_1/ && python ./train.py > /output/ex_1/train_stat && sleep 10" >> ./start.sh && \
 chmod 777 ./start.sh
 
 CMD ["sh","-c","./start.sh"]

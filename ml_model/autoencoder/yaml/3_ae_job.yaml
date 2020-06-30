@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: job-ae
+  labels:
+    mlmodel: ae
+spec:
+  backoffLimit: 3
+  template:
+    spec:
+      serviceAccountName: kjy
+      restartPolicy: OnFailure
+      containers:
+        - name: ae
+          image: 192.1.4.75:5000/model-ae:v0.1.5
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3307
+          volumeMounts:
+            - mountPath: "/output"
+              name: out-storage
+            - mountPath: "/input"
+              name: in-storage
+      volumes:
+        - name: in-storage
+          hostPath: # 추후 local pvc 생성 후 사용하도록 변경
+            path: /hosthome/kjy/input/ # input data 가 저장되어 있는 host node 의 경로
+            type: Directory
+        - name: out-storage
+          hostPath:
+            path: /mnt/sda1/data/ # 출력을 저장할 host node 의 경로
+            type: Directory
