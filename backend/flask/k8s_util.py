@@ -22,6 +22,7 @@ k8s job spec 을 생성합니다.
                                      labels=label)
 
   # volumes
+  # TODO pvc 미리 만들어 놓고 이름으로 생성하도록 변경
   in_hostpath = client.V1HostPathVolumeSource(path=const.INPUT_HOST_PATH,
                                               type='Directory')
   in_volume = client.V1Volume(name='in-storage', host_path=in_hostpath)
@@ -66,4 +67,5 @@ k8s job spec 을 생성합니다.
   # job spec
   spec = client.V1JobSpec(template=template, backoff_limit=3)
   job.spec = spec
+
   return job
