@@ -9,11 +9,20 @@ spec:
   template:
     spec:
       serviceAccountName: kjy
-      restartPolicy: OnFailure
+      restartPolicy: Never
       containers:
         - name: ae
-          image: 192.1.4.75:5000/model-ae:v0.1.5
+          image: 192.1.4.75:5000/model-ae:v0.1.9
           imagePullPolicy: Always
+          env:
+            - name: LEARNING_RATE
+              value: '0.005'   # TODO pod env 에서 str 말고 int, float 으로 받을 수 있는 방법
+            - name: EPOCH
+              value: '25'
+            - name: EXPERIMENT_ID
+              value: 'ex1'
+            - name: OUTPUT_MOUNT_POINT
+              value: '/output'
           ports:
             - containerPort: 3307
           volumeMounts:
@@ -23,7 +32,7 @@ spec:
               name: in-storage
       volumes:
         - name: in-storage
-          hostPath: # 추후 local pvc 생성 후 사용하도록 변경
+          hostPath: # TODO local pvc 미리 생성 후 사용하도록 변경
             path: /hosthome/kjy/input/ # input data 가 저장되어 있는 host node 의 경로
             type: Directory
         - name: out-storage
