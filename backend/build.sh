@@ -2,8 +2,9 @@
 
 REPOSITORY_URL=localhost:5000
 VERSION=v0.1.5
+IMAGE_NAME=flask-server
 
-docker build -t hello-flask:$VERSION .
-docker tag hello-flask:$VERSION $REPOSITORY_URL/hello-flask:$VERSION
+docker build -t $IMAGE_NAME:$VERSION .
+docker tag $IMAGE_NAME:$VERSION $REPOSITORY_URL/$IMAGE_NAME:$VERSION
 
-docker push $REPOSITORY_URL/hello-flask:$VERSION
+docker push $REPOSITORY_URL/$IMAGE_NAME:$VERSION

@@ -8,7 +8,7 @@ spec:
   serviceAccountName: kjy
   containers:
     - name: flask
-      image: 192.1.4.75:5000/hello-flask:v0.1.5
+      image: 192.1.4.75:5000/flask-server:v0.1.5
       imagePullPolicy: Always
       ports:
         - containerPort: 3307
