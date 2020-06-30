@@ -89,7 +89,7 @@ if __name__ == "__main__":
   parser.add_argument('--learning_rate', type=str, default='0.005')
   parser.add_argument('--epoch', type=str, default='20')
   parser.add_argument('--first_hidden_dim', type=str, default='20')
-  parser.add_argument('--second_hidden_dim', type=str, default='20')
+  parser.add_argument('--second_hidden_dim', type=str, default='10')
 
   args = parser.parse_args()
 
