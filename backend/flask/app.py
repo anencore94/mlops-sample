@@ -3,14 +3,15 @@
 API server
 """
 import json
+
 from flask import Flask, Response, request
 from kubernetes import client, config
 from kubernetes.client.rest import ApiException
 
+import const
 import dbutil
 
 app = Flask(__name__)
-PORT = "3307"
 
 
 @app.route("/model", methods=["GET"])
@@ -25,7 +26,7 @@ def get_model_info():
   sql_output = dbutil.select_model_info()
 
   if len(sql_output) == 0:
-    return {'StatusCode': '500', 'Message': 'There isn\'t any  model info'}
+    return {'StatusCode': '400', 'Message': 'There isn\'t any  model info'}
 
   msg = json.dumps(sql_output, ensure_ascii=False)  # 한글 인코딩
   response = Response(msg, status=200)
@@ -51,7 +52,6 @@ autoencoer 학습을 진행하는 k8s job 을 하나 생성합니다.
   req_lr = request.form['learning_rate']
   req_epoch = request.form['epoch']
   req_ex_id = request.form['experiment_id']
-  req_output_path = request.form['output_mount_path']
 
   # pod 에서 client 사용하려면 sa 사용해서 config load 해야 함
   config.load_incluster_config()
@@ -67,20 +67,20 @@ autoencoer 학습을 진행하는 k8s job 을 하나 생성합니다.
                                      labels=label)
 
   # volumes
-  in_hostpath = client.V1HostPathVolumeSource(path='/hosthome/kjy/input/',
+  in_hostpath = client.V1HostPathVolumeSource(path=const.INPUT_HOST_PATH,
                                               type='Directory')
   in_volume = client.V1Volume(name='in-storage', host_path=in_hostpath)
-  out_hostpath = client.V1HostPathVolumeSource(path='/mnt/sda1/data/',
+  out_hostpath = client.V1HostPathVolumeSource(path=const.OUTPUT_HOST_PATH,
                                                type='Directory')
   out_volume = client.V1Volume(name='out-storage', host_path=out_hostpath)
 
   # containerPort
-  container_port = client.V1ContainerPort(container_port=3307)
+  container_port = client.V1ContainerPort(container_port=int(const.FLASK_PORT))
 
   # volumeMount
-  in_volume_mount = client.V1VolumeMount(mount_path='/input',
+  in_volume_mount = client.V1VolumeMount(mount_path=const.INPUT_MOUNT_PATH,
                                          name='in-storage')
-  out_volume_mount = client.V1VolumeMount(mount_path='/output',
+  out_volume_mount = client.V1VolumeMount(mount_path=const.OUTPUT_MOUNT_PATH,
                                           name='out-storage')
 
   # envs
@@ -88,12 +88,12 @@ autoencoer 학습을 진행하는 k8s job 을 하나 생성합니다.
   env_epoch = client.V1EnvVar(name='EPOCH', value=req_epoch)
   env_ex_id = client.V1EnvVar(name='EXPERIMENT_ID', value=req_ex_id)
   env_output_path = client.V1EnvVar(name='OUTPUT_MOUNT_POINT',
-                                    value=req_output_path)
+                                    value=const.OUTPUT_MOUNT_PATH)
   envs = [env_lr, env_epoch, env_ex_id, env_output_path]
 
   # container
-  container = client.V1Container(name='ae',
-                                 image='192.1.4.75:5000/model-ae:v0.1.9',
+  container = client.V1Container(name=const.AE_MODEL_NAME,
+                                 image=const.AE_MODEL_IMAGE_URL,
                                  # TODO image tag 는 parameter 로 제공, DB 관리
                                  image_pull_policy='Always',
                                  ports=[container_port],
@@ -102,7 +102,7 @@ autoencoer 학습을 진행하는 k8s job 을 하나 생성합니다.
                                  env=envs)
 
   # pod spec
-  pod_spec = client.V1PodSpec(service_account_name='kjy',
+  pod_spec = client.V1PodSpec(service_account_name=const.SERVICE_ACCOUNT_NAME,
                               restart_policy='OnFailure',
                               containers=[container],
                               volumes=[in_volume, out_volume])
@@ -117,7 +117,7 @@ autoencoer 학습을 진행하는 k8s job 을 하나 생성합니다.
                                            body=job)  # sync call
   except ApiException as e:
     print(e)
-    return Response("Job Creation Failed", status=500)
+    return Response("Job Creation Failed", status=400)
 
   # TODO Job 이 completed 될 때까지 wait
   print('Job created')
@@ -147,4 +147,4 @@ def hello():
 
 
 if __name__ == "__main__":
-  app.run(host='0.0.0.0', port=PORT, debug=True)
+  app.run(host='0.0.0.0', port=const.FLASK_PORT, debug=True)
