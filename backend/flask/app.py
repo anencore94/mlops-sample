@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
+"""
+API server
+"""
 import json
 from flask import Flask, Response
 from kubernetes import client, config
+from kubernetes.client.rest import ApiException
 
 import dbutil
 
@@ -11,25 +15,37 @@ PORT = "3307"
 
 @app.route("/model", methods=["GET"])
 def get_model_info():
+  """
+  MODEL_INFO table 의 모든 row 를 조회합니다.
+
+  :return: 조회결과와 HTTP_STATUS 를 담은 Response
+  :rtype: Response
+"""
   # TODO try ~ exception ~ finally 로 변경
-  sqlOutput = dbutil.select_model_info()
+  sql_output = dbutil.select_model_info()
 
-  if len(sqlOutput) is 0:
+  if len(sql_output) == 0:
     return {'StatusCode': '500', 'Message': 'There isn\'t any  model info'}
-  else:
-    msg = json.dumps(sqlOutput, ensure_ascii=False)  # 한글 인코딩
 
-    response = Response(msg, status=200)
-    response.headers["Access-Control-Allow-Origin"] = "*"
-    response.headers["Content-Type"] = "application/json"  # text/html 로?
-    return response
+  msg = json.dumps(sql_output, ensure_ascii=False)  # 한글 인코딩
+  response = Response(msg, status=200)
+  response.headers["Access-Control-Allow-Origin"] = "*"
+  response.headers["Content-Type"] = "application/json"  # text/html 로?
+
+  return response
 
 
 @app.route("/test", methods=["POST"])
 def create_ae_job():
+  """
+autoencoer 학습을 진행하는 k8s job 을 하나 생성합니다.
+
+:return: 생성 여부와 HTTP_STATUS 를 담은 Response
+:rtype: Response
+"""
   # pod 에서 client 사용하려면 sa 사용해서 config load 해야 함
   config.load_incluster_config()
-  batchApi = client.BatchV1Api()
+  batch_api_client = client.BatchV1Api()
 
   job = client.V1Job()
 
@@ -61,21 +77,25 @@ def create_ae_job():
                                                 out_volume_mount]
                                  )
 
-  podSpec = client.V1PodSpec(service_account_name='kjy',
-                             restart_policy='OnFailure',
-                             containers=[container],
-                             volumes=[in_volume, out_volume])
-  template = client.V1PodTemplateSpec(spec=podSpec)
+  pod_spec = client.V1PodSpec(service_account_name='kjy',
+                              restart_policy='OnFailure',
+                              containers=[container],
+                              volumes=[in_volume, out_volume])
+  template = client.V1PodTemplateSpec(spec=pod_spec)
 
   spec = client.V1JobSpec(template=template, backoff_limit=3)
   job.spec = spec
 
-  # TODO 이거 주위로 kubernetes.client.rest.ApiException 감싸기
-  batchApi.create_namespaced_job(namespace='default', body=job)  # sync call
-  print('Job created')
-  print(str(job))
+  try:
+    batch_api_client.create_namespaced_job(namespace='default',
+                                           body=job)  # sync call
+  except ApiException as e:
+    print(e)
+    return Response("Job Creation Failed", status=500)
 
-  # TODO Job completed wait
+  # TODO Job 이 completed 될 때까지 wait
+  print('Job created')
+
   return Response("Job Created", status=200)
 
   # TODO 공유 후 삭제
