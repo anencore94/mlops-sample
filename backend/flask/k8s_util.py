@@ -31,7 +31,7 @@ k8s job spec 을 생성합니다.
   out_volume = client.V1Volume(name='out-storage', host_path=out_hostpath)
 
   # containerPort
-  container_port = client.V1ContainerPort(container_port=int(const.FLASK_PORT))
+  container_port = client.V1ContainerPort(container_port=const.FLASK_PORT)
 
   # volumeMount
   in_volume_mount = client.V1VolumeMount(mount_path=const.INPUT_MOUNT_PATH,

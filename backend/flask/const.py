@@ -1,8 +1,15 @@
 """
 Collection of constants
 """
-# server config
-FLASK_PORT = "3307"
+# flask server config
+FLASK_PORT = 3307
+
+# DB server config
+DB_IP = '192.168.99.100'
+DB_PORT = 31111
+DB_USER = 'testuser'
+DB_PASSWORD = 'testpassword'
+DB_DATABASE = 'testdb'
 
 # volume config
 INPUT_MOUNT_PATH = '/input'

@@ -3,12 +3,13 @@ Flask server 에서 mysql DB server 로 통신하는 부분의 구현체
 """
 import pymysql
 
+import const
 
 # db 연결
 def get_connection():
-  return pymysql.connect(host='192.168.99.100', port=31111,
-                         user='testuser', password='testpassword',
-                         db='testdb', charset='utf8')
+  return pymysql.connect(host=const.DB_IP, port=const.DB_PORT,
+                         user=const.DB_USER, password=const.DB_PASSWORD,
+                         db=const.DB_DATABASE, charset='utf8')
 
 
 def select_model_info():
