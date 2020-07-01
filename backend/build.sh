@@ -1,7 +1,7 @@
 #!/bin/bash
 
 REPOSITORY_URL=localhost:5000
-VERSION=v0.1.7
+VERSION=v0.1.8
 IMAGE_NAME=flask-server
 
 docker build -t $IMAGE_NAME:$VERSION .

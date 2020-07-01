@@ -1,15 +1,16 @@
 """
 Collection of constants
 """
+import os
 # flask server config
 FLASK_PORT = 3307
 
 # DB server config
-DB_IP = '192.168.99.100'
-DB_PORT = 31111
-DB_USER = 'testuser'
-DB_PASSWORD = 'testpassword'
-DB_DATABASE = 'testdb'
+DB_IP = os.getenv('DB_IP')
+DB_PORT = int(os.getenv('DB_PORT'))
+DB_USER = os.getenv('DB_USER')
+DB_PASSWORD = os.getenv('DB_PASSWORD')
+DB_DATABASE = os.getenv('DB_DATABASE')
 
 # volume config
 INPUT_MOUNT_PATH = '/input'
