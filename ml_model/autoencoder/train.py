@@ -6,7 +6,9 @@ from model import *
 def loss(model, original_data, training=True):
   if training:
     reconstruction_error = tf.reduce_mean(
-      tf.square(tf.subtract(model(original_data), original_data)), axis=-1)
+      tf.square(
+        tf.subtract(model(original_data), original_data)),
+      axis=-1)
   else:
     reconstruction_error = tf.reduce_mean(
       tf.square(
