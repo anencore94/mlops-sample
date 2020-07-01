@@ -18,6 +18,7 @@ End to End MLops 샘플 in k8s cluster
   - `kubectl apply -f {mlops-sample/db/yaml/*.yaml` 순서대로 수행
   - mysql pod 이 running 인지 확인
 - flask server 구축
+  - `kubectl apply -f {mlops-sample/backend/yaml/setup/*.yaml}` 순서대로 수행
   - `kubectl apply -f {mlops-sample/backend/yaml/*.yaml}` 순서대로 수행
   - flask pod 이 running 인지 확인
 - flask api 날리기

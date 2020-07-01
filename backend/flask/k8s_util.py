@@ -22,16 +22,14 @@ k8s job spec 을 생성합니다.
                                      labels=label)
 
   # volumes
-  # TODO pvc 미리 만들어 놓고 이름으로 생성하도록 변경
-  in_hostpath = client.V1HostPathVolumeSource(path=const.INPUT_HOST_PATH,
-                                              type='Directory')
-  in_volume = client.V1Volume(name='in-storage', host_path=in_hostpath)
-  out_hostpath = client.V1HostPathVolumeSource(path=const.OUTPUT_HOST_PATH,
-                                               type='Directory')
-  out_volume = client.V1Volume(name='out-storage', host_path=out_hostpath)
-
-  # containerPort
-  container_port = client.V1ContainerPort(container_port=const.FLASK_PORT)
+  in_volume = client.V1Volume(name='in-storage',
+                              persistent_volume_claim=
+                              client.V1PersistentVolumeClaimVolumeSource(
+                                claim_name='pvc-input'))
+  out_volume = client.V1Volume(name='out-storage',
+                               persistent_volume_claim=
+                               client.V1PersistentVolumeClaimVolumeSource(
+                                 claim_name='pvc-output'))
 
   # volumeMount
   in_volume_mount = client.V1VolumeMount(mount_path=const.INPUT_MOUNT_PATH,
@@ -52,7 +50,6 @@ k8s job spec 을 생성합니다.
                                  image=const.AE_MODEL_IMAGE_URL,
                                  # TODO image tag 는 parameter 로 제공, DB 관리
                                  image_pull_policy='Always',
-                                 ports=[container_port],
                                  volume_mounts=[in_volume_mount,
                                                 out_volume_mount],
                                  env=envs)

@@ -20,22 +20,18 @@ spec:
             - name: EPOCH
               value: '25'
             - name: EXPERIMENT_ID
-              value: 'ex1'
+              value: 'ex11'
             - name: OUTPUT_MOUNT_POINT
               value: '/output'
-          ports:
-            - containerPort: 3307
           volumeMounts:
             - mountPath: "/output"
               name: out-storage
             - mountPath: "/input"
               name: in-storage
       volumes:
-        - name: in-storage
-          hostPath: # TODO local pvc 미리 생성 후 사용하도록 변경
-            path: /hosthome/kjy/input/ # input data 가 저장되어 있는 host node 의 경로
-            type: Directory
-        - name: out-storage
-          hostPath:
-            path: /mnt/sda1/data/ # 출력을 저장할 host node 의 경로
-            type: Directory
+      - name: in-storage
+        persistentVolumeClaim:
+          claimName: pvc-input
+      - name: out-storage
+        persistentVolumeClaim:
+          claimName: pvc-output
