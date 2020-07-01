@@ -5,8 +5,12 @@ import pymysql
 
 import const
 
+
 # db 연결
 def get_connection():
+  # TODO DB_IP, DB_PORT 는 k8s client 로 db pod 이 떠있는 node 와 service port 를
+  #  조회해서 받아오도록 수정 필요
+  #  singleton session 보장 필요?
   return pymysql.connect(host=const.DB_IP, port=const.DB_PORT,
                          user=const.DB_USER, password=const.DB_PASSWORD,
                          db=const.DB_DATABASE, charset='utf8')
