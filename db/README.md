@@ -4,6 +4,7 @@
 ## 요구 사항
 - 추후 다른 pod 에서 mysql client 로 query 를 수행하기 위해 IP, PORT, user, password, database 의 유연한 제공 필요
   - pod.yaml 의 env 로 명시
+  - service 생성
 - 특정 table 생성하는 ddl 을 pod init 단계에서 수행 필요
   - pod.yaml 의 configmap 으로 명시
   - configmap.yaml 에서 ddl 작성
