@@ -1,0 +1,27 @@
+name: Mrx On Boarding
+
+on:
+  push:
+    branches: [ mrx-onboarding  ]
+
+env:
+  REPOSITORY_URL: localhost:5000
+  VERSION: v0.0.1 # TODO tag 로 변환
+  IMAGE_NAME: flask-server
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Mock Test
+        run: echo "Nothing to Test"
+  build:
+    needs: test # Ensure test job passes before pushing image.
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build image
+        run: echo $(pwd)
+#        run: docker build . --file Dockerfile --tag $IMAGE_NAME
