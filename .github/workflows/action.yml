@@ -23,5 +23,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build image
-        run: echo $(pwd)
-#        run: docker build . --file Dockerfile --tag $IMAGE_NAME
+        run: docker build . --file ./backend/Dockerfile -t $IMAGE_NAME:$VERSION # $(pwd) : mlops-sample
+      - name: Check if build successful
+        run: docker images | grep $IMAGE_NAME
