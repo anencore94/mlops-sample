@@ -1,7 +1,8 @@
 #!/bin/bash
 
-REPOSITORY_URL=localhost:5000
-VERSION=v0.0.1
+#REPOSITORY_URL=localhost:5000
+REPOSITORY_URL=ghcr.io/anencore94
+VERSION=v0.0.3
 IMAGE_NAME=flask-server
 
 docker build -t $IMAGE_NAME:$VERSION .
