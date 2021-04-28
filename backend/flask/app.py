@@ -16,7 +16,7 @@ import k8s_util
 app = Flask(__name__)
 
 
-@app.route("/model", methods=["GET"])
+@app.route("/", methods=["POST"])
 def get_model_info():
   """
   MODEL_INFO table 의 모든 row 를 조회합니다.
