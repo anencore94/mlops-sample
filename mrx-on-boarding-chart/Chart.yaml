@@ -1,6 +1,6 @@
 apiVersion: v2
 name: mrx-on-boarding-chart
-description: A Helm chart for Kubernetes
+description: For Mrx On-Boarding
 
 # A chart can be either an 'application' or a 'library' chart.
 #
