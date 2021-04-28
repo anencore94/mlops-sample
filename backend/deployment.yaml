@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask
+  labels:
+    app: flask
+spec:
+  selector:
+    matchLabels:
+      app: flask
+  template:
+    metadata:
+      labels:
+        app: flask
+    spec:
+      containers:
+      - name: flask
+        image: ghcr.io/anencore94/flask-server:v0.0.3
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3307
+      imagePullSecrets:
+        - name: test-secret-to-use-private-ghcr
