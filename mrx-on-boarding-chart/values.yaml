@@ -3,5 +3,11 @@ db:
   userName: testuser
   password: testpassword
   rootPassword: testpassword
-  port: 3306
+  containerPort: 3306
+  externalPort: 31111
 flask:
+  imageName: ghcr.io/anencore94/flask-server
+  imageTag: v0.0.5
+  containerPort: 3307
+  mysqlIP: 192.168.49.2 # minikube ip (since nodeport service)
+  externalPort: 31112

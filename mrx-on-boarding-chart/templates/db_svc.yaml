@@ -7,6 +7,6 @@ spec:
   selector:
     run: mysql
   ports:
-    - port: 3306
-      nodePort: 31111
+    - port: {{ .Values.db.containerPort }}
+      nodePort: {{ .Values.db.externalPort }}
       name: http

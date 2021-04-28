@@ -18,7 +18,7 @@ spec:
     - name: MYSQL_ROOT_PASSWORD
       value: {{ .Values.db.rootPassword }}
     ports:
-      - containerPort: {{ .Values.db.port }}
+      - containerPort: {{ .Values.db.containerPort }}
     volumeMounts:
       - name: mysql-initdb
         mountPath: /docker-entrypoint-initdb.d
