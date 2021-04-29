@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: flask
-        image: ghcr.io/anencore94/flask-server:v0.0.5
+        image: ghcr.io/anencore94/flask-server:v0.1.3
         imagePullPolicy: Always
         ports:
         - containerPort: 3307
