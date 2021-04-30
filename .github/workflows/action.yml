@@ -8,7 +8,7 @@ on:
 
 env:
   REPOSITORY_URL: ghcr.io/${{ github.repository_owner }}
-  VERSION: v0.1.4 # TODO tag 로 변환
+  VERSION: v1.0.0 # TODO tag 로 변환
   IMAGE_NAME: flask-server
 
 jobs:
@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Branch Checkout
         uses: actions/checkout@v2
+        with:
+          ref: mrx-onboarding
       - name: Mock Test
         run: echo "Nothing to Unit Test"
   build_and_push:
@@ -26,6 +28,8 @@ jobs:
     steps:
       - name: Branch Checkout
         uses: actions/checkout@v2
+        with:
+          ref: mrx-onboarding
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v1
       - name: Login to ghcr
@@ -37,22 +41,36 @@ jobs:
       - name: Build Docker Image
         run: |
           cd ./backend # since source code hardcoding
-          docker build . --file ./Dockerfile -t $REPOSITORY_URL/$IMAGE_NAME:$VERSION
+          docker build . --file ./Dockerfile -t ${{ env.REPOSITORY_URL }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
       - name: Check if build successful
         run: docker images | grep $IMAGE_NAME
       - name: Docker push to ghcr
-        run: docker push $REPOSITORY_URL/$IMAGE_NAME:$VERSION
-  change_chart_and_commit: # TODO values.yaml 고치고, commit 때리기
+        run: docker push ${{ env.REPOSITORY_URL }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+  change_chart_and_commit:
     needs: [unit_test, build_and_push]
     runs-on: ubuntu-latest
     steps:
       - name: Branch Checkout
         uses: actions/checkout@v2
-      - name: Change values.yaml with New Image Tag
-        run: echo "hi"
-      - name: Git Commit
-        uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: New Image Released
+          ref: mrx-onboarding
+      - name: Change values.yaml with New Image Tag
+        run: |
+          echo $(pwd)
+          mv ./mrx-on-boarding-chart/values.yaml ./mrx-on-boarding-chart/values-orig.yaml
+          sed 's|imageTag: v*.*.*|imageTag: ${{ env.VERSION }}|' ./mrx-on-boarding-chart/values-orig.yaml > ./mrx-on-boarding-chart/values.yaml
+          rm ./mrx-on-boarding-chart/values-orig.yaml
+          cat ./mrx-on-boarding-chart/values.yaml
+      - name: Git Add, Commit and Push
+        uses: github-actions-x/commit@v2.8
+        with:
+          github-token: ${{ secrets.PERSONAL_TOKEN }}
+          push-branch: mrx-onboarding
+          commit-message: '[New Release] ${{ env.REPOSITORY_URL }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }} has been released!'
+          rebase: 'true'
+          force-add: 'true'
+          files: ./mrx-on-boarding-chart/values.yaml
+          name: anencore94
+          email: anencore94@gmail.com
       - name: Mock Test
         run: echo "Re-Deploy"
