@@ -103,7 +103,7 @@ autoencoer 학습을 진행하는 k8s job 을 하나 생성합니다.
 
 @app.route("/", methods=["GET"])
 def hello():
-  return "Hello Flask!"
+  return "Welcome to Makinarocks!"
 
 
 if __name__ == "__main__":
