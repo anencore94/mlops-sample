@@ -7,7 +7,7 @@ db:
   externalPort: 31111
 flask:
   imageName: ghcr.io/anencore94/flask-server
-  imageTag: v1.0.3
+  imageTag: v1.0.4
   containerPort: 3307
   mysqlIP: 192.168.39.169 # minikube ip (since nodeport service)
 #  externalPort: 31112
