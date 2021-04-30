@@ -106,5 +106,10 @@ def hello():
   return "Welcome to Makinarocks!"
 
 
+@app.route("/hello", methods=["GET"])
+def hello():
+  return "Hello ADP"
+
+
 if __name__ == "__main__":
   app.run(host='0.0.0.0', port=const.FLASK_PORT, debug=True)

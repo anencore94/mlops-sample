@@ -8,7 +8,7 @@ on:
 
 env:
   REPOSITORY_URL: ghcr.io/${{ github.repository_owner }}
-  VERSION: v1.0.1 # TODO tag 로 변환
+  VERSION: v1.0.2 # TODO tag 로 변환
   IMAGE_NAME: flask-server
 
 jobs:
@@ -24,7 +24,6 @@ jobs:
   build_and_push:
     needs: unit_test # Ensure test job passes before pushing image.
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' # TODO 필요?
     steps:
       - name: Branch Checkout
         uses: actions/checkout@v2

@@ -1,4 +1,4 @@
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: test-ingress
@@ -6,10 +6,13 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-  - http:
+  - host: test.on.boarding.com
+    http:
       paths:
       - path: /web-server
         pathType: Exact
         backend:
-          serviceName: flask-service
-          servicePort: 3307
+          service:
+            name: flask-service
+            port:
+              number: 3307
