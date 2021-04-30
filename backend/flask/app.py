@@ -107,7 +107,7 @@ def hello():
 
 
 @app.route("/hello", methods=["GET"])
-def hello():
+def hello_adp():
   return "Hello ADP"
 
 
