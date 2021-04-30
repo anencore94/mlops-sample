@@ -54,10 +54,11 @@ jobs:
         with:
           ref: mrx-onboarding
       - name: Change values.yaml with New Image Tag
+        working-directory: mrx-on-boarding-chart
         run: |
-          mv ./mrx-on-boarding-chart/values.yaml ./mrx-on-boarding-chart/values-orig.yaml
-          sed 's|imageTag: v*.*.*|imageTag: ${{ env.VERSION }}|' ./mrx-on-boarding-chart/values-orig.yaml > ./mrx-on-boarding-chart/values.yaml
-          rm ./mrx-on-boarding-chart/values-orig.yaml
+          mv values.yaml values-orig.yaml
+          sed 's|imageTag: v*.*.*|imageTag: ${{ env.VERSION }}|' values-orig.yaml > values.yaml
+          rm values-orig.yaml
       - name: Git Add, Commit and Push
         uses: github-actions-x/commit@v2.8
         with:
