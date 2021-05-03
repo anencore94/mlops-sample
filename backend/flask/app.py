@@ -108,7 +108,7 @@ def hello():
 
 @app.route("/hello", methods=["GET"])
 def hello_adp():
-  return "Hello ADP"
+  return "Hello ADP, 안녕하세요"
 
 
 if __name__ == "__main__":
