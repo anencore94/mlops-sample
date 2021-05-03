@@ -3,13 +3,14 @@ kind: Ingress
 metadata:
   name: test-ingress
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/rewrite-target: /$2 # Check This!!
+    kubernetes.io/ingress.class: "nginx"
 spec:
   rules:
   - host: test.on.boarding.com
     http:
       paths:
-      - path: /web-server
+      - path: /web-server(/|$)(.*) # # Check This!!
         pathType: Exact
         backend:
           service:
