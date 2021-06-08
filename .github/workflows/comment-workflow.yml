@@ -13,10 +13,6 @@ jobs:
       - name: Find Current PR number
         uses: jwalton/gh-find-current-pr@v1
         id: findPr
-      - name: check pwd
-        run: pwd
-      - name: check ls
-        run: ls -al
       - name: Render template
         id: template
         uses: chuhlomin/render-template@v1.2
@@ -25,6 +21,8 @@ jobs:
           # 앞단에서 결과 받기
           vars: |
             R_square: 0.99
+      - name: test
+        run: echo ${{ steps.findPr.outputs.pr }}
       - name: Create comment
         uses: peter-evans/create-or-update-comment@v1
         with:
