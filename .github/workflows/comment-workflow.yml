@@ -8,15 +8,18 @@ jobs:
   commentCreated:
     runs-on: ubuntu-latest
     steps:
-      - uses: jwalton/gh-find-current-pr@v1
+      - name: Find Current PR number
+        uses: jwalton/gh-find-current-pr@v1
         id: findPr
+      - name: Render template
+        id: template
+        uses: chuhlomin/render-template@v1.2
+        with:
+          template: .github/comment-template.md
+          vars: |
+            R_square: 0.99
       - name: Create comment
         uses: peter-evans/create-or-update-comment@v1
         with:
           issue-number: ${{ steps.findPr.outputs.pr }}
-          body: |
-            This is a multi-line test comment
-            - With GitHub **Markdown** :sparkles:
-            - Created by [create-or-update-comment][1]
-
-            [1]: https://github.com/peter-evans/create-or-update-comment
+          body: ${{ steps.template.outputs.result }}
