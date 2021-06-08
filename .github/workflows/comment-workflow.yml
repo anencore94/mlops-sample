@@ -11,6 +11,8 @@ jobs:
       - name: Find Current PR number
         uses: jwalton/gh-find-current-pr@v1
         id: findPr
+      - name: check pwd
+        run: pwd
       - name: Render template
         id: template
         uses: chuhlomin/render-template@v1.2
