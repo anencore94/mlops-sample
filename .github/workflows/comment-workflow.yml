@@ -1,8 +1,6 @@
 name: Comment
 
-on:
-  pull_request_review_comment:
-    types: [created, edited]
+on: issue_comment
 
 jobs:
   create_comment:
