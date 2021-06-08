@@ -8,6 +8,8 @@ jobs:
   commentCreated:
     runs-on: ubuntu-latest
     steps:
+      - name: Branch Checkout
+        uses: actions/checkout@v2
       - name: Find Current PR number
         uses: jwalton/gh-find-current-pr@v1
         id: findPr
