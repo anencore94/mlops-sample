@@ -13,6 +13,8 @@ jobs:
         id: findPr
       - name: check pwd
         run: pwd
+      - name: check ls
+        run: ls -al
       - name: Render template
         id: template
         uses: chuhlomin/render-template@v1.2
