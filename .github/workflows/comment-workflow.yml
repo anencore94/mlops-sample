@@ -17,7 +17,7 @@ jobs:
         id: template
         uses: chuhlomin/render-template@v1.2
         with:
-          template: .github/comment-template.md
+          template: ./.github/comment-template.md
           vars: |
             R_square: 0.99
       - name: Create comment
