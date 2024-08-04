@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-{{ .Release.Name }}-{{ .Chart.Version }}
+  labels:
+    app: flask
+spec:
+  selector:
+    matchLabels:
+      app: flask
+  template:
+    metadata:
+      labels:
+        app: flask
+    spec:
+      containers:
+      - name: flask
+        image: {{ .Values.flask.imageName }}:{{ .Values.flask.imageTag }}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: {{ .Values.flask.containerPort }}
+        env:
+          - name: DB_IP
+            value: {{ .Values.flask.mysqlIP | quote }} # DB pod 이 떠있는 node 의 IP 으로 수정
+      imagePullSecrets:
+        - name: test-secret-to-use-private-ghcr

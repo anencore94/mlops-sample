@@ -16,7 +16,7 @@ import k8s_util
 app = Flask(__name__)
 
 
-@app.route("/model", methods=["GET"])
+@app.route("/", methods=["POST"])
 def get_model_info():
   """
   MODEL_INFO table 의 모든 row 를 조회합니다.
@@ -103,7 +103,12 @@ autoencoer 학습을 진행하는 k8s job 을 하나 생성합니다.
 
 @app.route("/", methods=["GET"])
 def hello():
-  return "Hello Flask!"
+  return "Welcome to Makinarocks! Hi"
+
+
+@app.route("/hello", methods=["GET"])
+def hello_adp():
+  return "Hello ADP, 안녕하세요"
 
 
 if __name__ == "__main__":
